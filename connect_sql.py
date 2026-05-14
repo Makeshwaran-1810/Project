@@ -193,12 +193,25 @@ def view_order():
 
     return data
 
-@app.get("/ordertable")
-def view_order_table():
+@app.get("/orderleftjoin")
+def view_order_leftjoin():
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
     cursor.execute("SELECT order_list.Order_List_Id, user.Username, user.Mobile_Number, product.Product_Name, order_items.Quantity, order_list.Total_Amount, order_list.Order_Date, order_list.Order_Status FROM order_list LEFT JOIN user ON user.User_Id=order_list.User_Id LEFT JOIN order_items ON order_items.Order_List_Id=order_list.Order_List_Id LEFT JOIN product ON product.Product_Id=order_items.Product_Id")
+    data = cursor.fetchall()
+
+    cursor.close()
+    db.close()
+
+    return data
+
+@app.get("/orderrightjoin")
+def view_order_rightjoin():
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT order_list.Order_List_Id, user.Username, user.Mobile_Number, product.Product_Name, order_items.Quantity, order_list.Total_Amount, order_list.Order_Date, order_list.Order_Status FROM order_list RIGHT JOIN user ON user.User_Id=order_list.User_Id RIGHT JOIN order_items ON order_items.Order_List_Id=order_list.Order_List_Id RIGHT JOIN product ON product.Product_Id=order_items.Product_Id")
     data = cursor.fetchall()
 
     cursor.close()
